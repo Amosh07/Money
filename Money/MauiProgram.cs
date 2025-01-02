@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using DataAccess.Interface;
+using DataAccess.Services;
+using Microsoft.Extensions.Logging;
 
 namespace Money
 {
@@ -17,7 +19,8 @@ namespace Money
             builder.Services.AddMauiBlazorWebView();
 
 #if DEBUG
-    		builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Services.AddScoped<IUserInterface,UserService>();
+            builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
 #endif
 
