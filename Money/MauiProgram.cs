@@ -1,6 +1,7 @@
 ﻿using DataAccess.Interface;
 using DataAccess.Services;
 using Microsoft.Extensions.Logging;
+using MudBlazor.Services;
 
 namespace Money
 {
@@ -19,11 +20,13 @@ namespace Money
             builder.Services.AddMauiBlazorWebView();
 
 #if DEBUG
+            //Service inject//
             builder.Services.AddScoped<IUserInterface,UserService>();
             builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
 #endif
-
+            //Mudblazor service//
+            builder.Services.AddMudServices();
             return builder.Build();
         }
     }
