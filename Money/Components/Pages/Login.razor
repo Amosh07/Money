@@ -1,10 +1,17 @@
 ﻿@page "/login"
 
 <div class="form-login">
-    <form class="text-center" @onsubmit="HandleLogin">
-        <img class="mb-4" src="/appicon.png" alt="" height="72">
-        <h1 class="h3 mb-3 fw-normal">Please Login</h1>
-
+    <form class="text-center shadow-lg p-5 rounded-start  bg-lightest-yellow table-borderless" @onsubmit="HandleLogin">
+        <style>
+            .bg-lightest-yellow {
+                background-color: #80D8FF; /* Turquoise color */
+            }
+        </style>
+        <img class="mb-3" src="/appicon.png" alt="" height="70">
+        <h1 class="h3 mb-3 fw-bold text-decoration-underline shadow-sm pa-3" Style="@($"color:{Colors.Purple.Darken4};")">Welcome User</h1>
+        <p class="mb-4 navbar-text shadow-sm  pa-4" Style="@($"color:{Colors.Purple.Darken4};")">Please enter your credentials </p>
+        
+        <!-- Username Input -->
         <div class="form-floating mb-3">
             <input type="text" class="form-control" @bind="Users.UserName" placeholder="Username" />
             <label for="floatingInput">Username</label>
@@ -18,10 +25,9 @@
 
         @if (!string.IsNullOrEmpty(ErrorMessage))
         {
-            <div class="alert alert-danger">@ErrorMessage</div>
+            <div class="alert alert-danger" >@ErrorMessage</div>
         }
-        <button class="btn btn-lg btn-primary">
-            Login
+        <button class=<MudButton Variant="Variant.Filled" Size="Size.Large"  Color="Color.Tertiary">Login</MudButton>
         </button>
 
     </form>

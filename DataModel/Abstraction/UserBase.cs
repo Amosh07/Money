@@ -3,24 +3,41 @@ using System.Text.Json;
 
 namespace DataModel.Abstraction
 {
-    public abstract class UserBase
+    public abstract class UserBase<T>
     {
-        protected static readonly string FilePath = Path.Combine(FileSystem.AppDataDirectory, "users.json");
-        protected List<User> LoadUsers()
+        private readonly string FilePath;
+
+        protected UserBase(string fileName ) 
         {
-            if (!File.Exists(FilePath)) return new List<User>();
+            FilePath = Path.Combine(FileSystem.AppDataDirectory, fileName);
+
+            EnsureDirectoryExists();
+        }
+        private void EnsureDirectoryExists() 
+        {
+            var directory = Path.GetDirectoryName(FilePath);
+
+            if (!Directory.Exists(directory)) 
+            {
+                Directory.CreateDirectory(directory);
+            }
+        }
+
+        protected List<T> LoadData() 
+        {
+            if (!Directory.Exists(FilePath)) return new List<T>();
 
             var json = File.ReadAllText(FilePath);
 
-            return JsonSerializer.Deserialize<List<User>>(json) ?? new List<User>();
+            return JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
         }
-
-        protected void SaveUsers(List<User> users)
+       
+        protected void SaveData(List<T> item) 
         {
-
-            var json = JsonSerializer.Serialize(users);
+            var json = JsonSerializer.Serialize(item);
 
             File.WriteAllText(FilePath, json);
         }
+       
     }
 }

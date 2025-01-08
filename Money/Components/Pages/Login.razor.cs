@@ -12,7 +12,7 @@ namespace Money.Components.Pages
         {
             if (UserInterface.Login(Users)) 
             {
-                Nav.NavigateTo("/home");
+                Nav.NavigateTo("/dashboard");
             }
             else
             {

@@ -4,20 +4,20 @@ using DataModel.Model;
 
 namespace DataAccess.Services
 {
-    public class UserService : UserBase,IUserInterface
+    public class UserService : UserBase<User>,IUserInterface
     {
         private List<User> _user;
 
         public const string SeedUserName = "Admin";
         public const string SeedPassword = "Password";
-        public UserService()
+        public UserService():base("User.json")
         {
-            _user = LoadUsers();
+            _user = LoadData();
 
             if (!_user.Any()) 
             {
                 _user.Add(new User { UserName = SeedUserName, Password = SeedPassword });
-                SaveUsers(_user);
+                SaveData(_user);
             }
         }
         public bool Login(User user)
