@@ -12,8 +12,8 @@
 
         public DateTime DeletedDate { get; set; }
 
-        public string CreatedAt { get; set; }
+        public Guid CreatedAt { get; set; }
 
-        public DateTime UpdatedAt { get; set; }
+        public Guid UpdatedAt { get; set; }
     }
 }

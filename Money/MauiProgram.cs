@@ -23,6 +23,7 @@ namespace Money
             //Service inject//
             builder.Services.AddScoped<IUserInterface,UserService>();
             builder.Services.AddScoped<ITransactionsInterface, TransactionsService>();
+            builder.Services.AddScoped<ITagInterface, TagService>();
             builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
 #endif
