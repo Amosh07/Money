@@ -16,12 +16,13 @@ namespace Money.Components.Pages
         private async Task GetAllTags() 
         {
             var response = TagInterface.GetAllTag();
-            if (response == null) 
+            if (response is null) 
             {
                 Console.WriteLine("not found");
                 return;
             }
             Tags = response;
+            StateHasChanged();
         }
         #endregion
 

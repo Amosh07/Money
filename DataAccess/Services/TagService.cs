@@ -3,6 +3,7 @@ using DataModel.Abstraction;
 using DataModel.Model;
 using DataModel.Model.DTO;
 
+
 namespace DataAccess.Services
 {
     public class TagService : UserBase<Tag>, ITagInterface
@@ -32,20 +33,23 @@ namespace DataAccess.Services
 
         public async Task AddTag(CreatedTagDto tag)
         {
-            try
+            var exists = _tag.FirstOrDefault<Tag>(t => t.TagName == tag.TagName);
+
+            if (exists != null)
             {
-                var tagmodel = new Tag()
-                {
-                    Id = new Guid(),
-                    IsActive = true,
-                    TagName = tag.TagName
-                };
-                _tag.Add(tagmodel);
-                SaveData(_tag);
-            }catch (Exception ex) 
-            {
-                throw new Exception("something is wrong", ex);
+                throw new Exception("the flowong tag is already exits");
             }
+
+            var tagModel = new Tag()
+            {
+                Id = Guid.NewGuid(),
+                IsActive = true,
+                TagName = tag.TagName,
+            };
+
+            _tag.Add(tagModel);
+
+            SaveData(_tag);
         }
 
         public List<Tag> GetAllTag()
