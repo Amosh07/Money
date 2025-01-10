@@ -24,6 +24,7 @@ namespace Money
             builder.Services.AddScoped<IUserInterface,UserService>();
             builder.Services.AddScoped<ITransactionsInterface, TransactionsService>();
             builder.Services.AddScoped<ITagInterface, TagService>();
+            builder.Services.AddScoped<IDebtInterface, DebtService>();
             builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
 #endif
