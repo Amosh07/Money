@@ -1,11 +1,13 @@
 ﻿@page "/customTag"
 @using Money.Components.Dialog
 @using Money.Components.Layout
+
 @if(Tags == null)
 {
     <Loader/>
 }
 else
+
 {<Back />
     <MudPaper Class="p-4">
         <MudText Typo="Typo.h5" GutterBottom>Manage Tags</MudText>

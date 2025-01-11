@@ -1,0 +1,125 @@
+﻿@page "/transactions"
+@using DataModel.Model.Constants
+@using Money.Components.Layout
+
+@if(transactions == null)
+{
+    <Loader/>
+}
+else
+{
+    <Back/>
+    <MudPaper Class="p-4">
+        <MudText Typo="Typo.h5" GutterBottom>Manage Transaction</MudText>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" class="btn btn--md" OnClick="OpenTransactionRegister" Disabled="IsCreateModalOpen" ButtonType="ButtonType.Submit">Add Transactions</MudButton>
+        
+        <div class="table-responsive">
+            <table class="table country-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Transaction Amount</th>
+                        <th>Transaction Type</th>
+                        <th>Tag</th>
+                        <th>Remark</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in transactions)
+                    {
+                        <tr>
+                            <td>@(transactions.IndexOf(item) + 1).</td>
+                            <td>@item.Title</td>
+                            <td>@item.TransactionAmount.ToString("C")</td>
+                            <td>@item.TransactionTypes</td>
+                            <td>@item.TransactionDate</td>
+                            <td>@item.Tag?.TagName</td>
+                            <td>@item.Remarks</td>
+                            <td>
+                                <div class="action">
+                                    <MudTooltip Text="Edit" Color="Color.Primary" Arrow="true">
+                                        <MudImage Src="images/icons/edit.svg" Alt="Edit Icon" Height="18" Width="18" @onclick="() => OpenUpdateDebtModal(item.Id)" />
+                                    </MudTooltip>
+                                    <MudTooltip Text="@(item.IsActive ? "Deactive" : "Active")" Color="Color.Primary" Arrow="true">
+                                        <MudImage Src="@(item.IsActive ? "images/icons/document.svg" : "images/icons/delete.svg")" Alt="Status Icon" Height="18" Width="18" @onclick="() => OpenDebtDeleteModal(item.Id)" />
+                                    </MudTooltip>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </MudPaper>
+}
+
+@if (IsCreateModalOpen)
+{
+    <ModalLayout Module="Transaction"
+                 Title="Add Transaction"
+                 Description="Add a new Transaction"
+                 SubmitColor="Color.Primary"
+                 Size="modal-lg"
+                 OnSave="AddRegisterTransaction"
+                 CancelLabel="Discard"
+                 SubmitLabel="Save"
+                 IsDisabled="IsCreateButtonDisabled"
+                 IsVisible="@IsCreateModalOpen"
+                 IsVisibleChanged="@((bool value) => IsCreateModalOpen = value)">
+            <MudGrid>
+                <MudItem xs="12">
+                <MudTextField Label="Titles" @bind-Value="createTransaction.Title" Required="true" Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                <MudTextField Label="Transaction Amount" @bind-Value="createTransaction.TransactionAmount" Required="true" Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Label="Transaction Type" @bind-Value="createTransaction.TransactionType" Required="true" Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                <MudSelect T="Guid" Label="Select a Tag" @bind-Value="createTransaction.TagId" Variant="Variant.Outlined">
+                    @if(Tags != null)
+                    {
+                        @foreach (var tag in Tags)
+                        {
+                          <MudSelectItem T="Guid" Value="tag.Id">@tag.TagName</MudSelectItem> 
+                        }
+                    }
+                </MudSelect>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Label="Remark" @bind-Value="createTransaction.Remarks" Required="true" Variant="Variant.Outlined" />
+                </MudItem>
+            </MudGrid>
+    </ModalLayout>
+}
+@if (IsDeleteModalOpen)
+{
+    <ModalLayout Module="Tag"
+                 Title="Delete Tag"
+                 Description="Are you sure you want to delete this Transaction?"
+                 SubmitColor="Color.Primary"
+                 Size="modal-lg"
+                 OnSave="@DeleteTag"
+                 CancelLabel="Discard"
+                 SubmitLabel="@(DeleteTransaction.IsActive ? "Deactivate" : "Activate")"
+                 IsDisabled="IsDeleteModalOpen"
+                 IsVisible="@IsDeleteModalOpen"
+                 IsVisibleChanged="@((bool value) => IsDeleteModalOpen = value)">
+        <div class="text-center">
+            <LoadIcon Height="200"
+                      Width="200"
+                      Icon="@(DeleteTransaction.IsActive ? Animations.Regular.Trash : Animations.Regular.Edit)"
+                      State="hover-pinch"
+                      Trigger="loop" />
+            <MudText Class="hfs4 data fw-600">
+                Are you sure you want to @(DeleteTransaction.IsActive ? "deactivate" : "activate") the following Transaction?
+            </MudText>
+        </div>
+    </ModalLayout>
+}
+
+
+
