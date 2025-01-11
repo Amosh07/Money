@@ -5,16 +5,22 @@ namespace DataModel.Model
 {
     public class Transactions: BaseEntity<Guid>
     {
-        public string Title { get; set; }
+       public Guid Id { get; set; }
 
-        public decimal Amount { get; set; }
+        public string? Title { get; set; }
 
-        public DateTime TransactionDate { get; set; }
+        public decimal TransactionAmount {  get; set; }
+
+        public DateTime? TransactionDate { get; set; }
 
         public TransactionTypes TransactionTypes { get; set; }
 
-        public DefultTags Tags { get; set; }
+        public bool IsActive { get; set; }
 
-        public string Notes { get; set; }
+        public string Remarks { get; set; }
+
+        public Guid TagId { get; set; }
+
+        public Tag Tag { get; set; }
     }
 }
