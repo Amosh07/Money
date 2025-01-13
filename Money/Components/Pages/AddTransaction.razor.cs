@@ -40,7 +40,7 @@ namespace Money.Components.Pages
         }
         #endregion
 
-        #region Add Transaction
+        #region Add Transaction 
         private bool IsCreateButtonDisabled =>
         string.IsNullOrEmpty(createTransaction.Title) ||
         string.IsNullOrEmpty(createTransaction.TransactionDate.ToString()) ||

@@ -61,5 +61,15 @@ namespace DataAccess.Services
         {
             return _tag.FirstOrDefault(t => t.Id == Id);
         }
+
+        public object UpdateTag(UpdateTagDto updateTagDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task ITagInterface.UpdateTag(UpdateTagDto tag)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

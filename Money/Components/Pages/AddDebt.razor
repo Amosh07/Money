@@ -9,10 +9,10 @@
 }
 else
 {
-    <Back/>
-    <MudPaper Class="p-4">
+    <Back />
+    <MudPaper Class="p-4 custom-debt-paper">
         <MudText Typo="Typo.h5" GutterBottom>Manage Debts</MudText>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" class="btn btn--md" OnClick="OpenDebtRegister" Disabled="IsCreateModalOpen" ButtonType="ButtonType.Submit">Add Debt</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" OnClick="OpenDebtRegister" Disabled="IsCreateModalOpen" ButtonType="ButtonType.Submit" Class="custom-debt-btn">Add Debt</MudButton>
         
         <div class="table-responsive">
             <table class="table country-table">
@@ -21,7 +21,7 @@ else
                         <th>#</th>
                         <th>SourceOfDebt</th>
                         <th>DebtAmount</th>
-                        <th>DeuDate</th>
+                        <th>DueDate</th>
                         <th>Tag</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -58,30 +58,27 @@ else
 {
     <ModalLayout Module="Debt"
                  Title="Add Debts"
-                 Description="Add a new Debts"
+                 Description="Add a new Debt"
                  SubmitColor="Color.Primary"
                  Size="modal-lg"
                  OnSave="AddRegisterDebt"
                  CancelLabel="Discard"
                  SubmitLabel="Save"
-                 IsDisabled="IsCreateButtonDisabled"
                  IsVisible="@IsCreateModalOpen"
                  IsVisibleChanged="@((bool value) => IsCreateModalOpen = value)">
-            <MudGrid>
-                <MudItem xs="12">
-                    <MudTextField Label="Debt Source" @bind-Value="CreateDebtDto.DebtSource" Required="true" Variant="Variant.Outlined"/>
-                </MudItem>
-                <MudItem xs="12">
-                    <MudTextField Label="Debt Amount" @bind-Value="CreateDebtDto.DebtAmount" Required="true" Variant="Variant.Outlined"/>
-                </MudItem>
+        <MudGrid>
+            <MudItem xs="12">
+                <MudTextField Label="Debt Source" @bind-Value="CreateDebtDto.DebtSource" Required="true" Variant="Variant.Outlined"/>
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField Label="Debt Amount" @bind-Value="CreateDebtDto.DebtAmount" Required="true" Variant="Variant.Outlined"/>
+            </MudItem>
             <MudSelect T="Guid" Label="Select a Tag" @bind-Value="CreateDebtDto.TagId" Variant="Variant.Outlined">
                 @if (Tags != null)
                 {
                     @foreach (var tag in Tags)
                     {
-
                         <MudSelectItem T="Guid" Value="tag.Id">@tag.TagName</MudSelectItem>
-
                     }
                 }
             </MudSelect>
@@ -93,14 +90,15 @@ else
                                PickerVariant="PickerVariant.Dialog"
                                DateFormat="dd.MM.yyyy" />
             </MudItem>
-            </MudGrid>
+        </MudGrid>
     </ModalLayout>
 }
+
 @if (IsDeleteModalOpen)
 {
-    <ModalLayout Module="Tag"
-                 Title="Delete Tag"
-                 Description="Are you sure you want to delete this tag?"
+    <ModalLayout Module="Debt"
+                 Title="Delete Debt"
+                 Description="Are you sure you want to delete this debt?"
                  SubmitColor="Color.Primary"
                  Size="modal-lg"
                  OnSave="@DeleteTag"
@@ -116,10 +114,85 @@ else
                       State="hover-pinch"
                       Trigger="loop" />
             <MudText Class="hfs4 data fw-600">
-                Are you sure you want to @(DeleteDebt.IsActive ? "deactivate" : "activate") the following Tag?
+                Are you sure you want to @(DeleteDebt.IsActive ? "deactivate" : "activate") the following debt?
             </MudText>
         </div>
     </ModalLayout>
 }
 
+@if (IsUpdateModalOpen)
+{
+    <ModalLayout Module="Debts"
+                 Title="Update Debt"
+                 Description="Update an existing debt by filling out the form."
+                 SubmitColor="Color.Primary"
+                 Size="modal-lg"
+                 OnSave="@UpdateTag"
+                 IsVisible="true"
+                 CancelLabel="Discard"
+                 SubmitLabel="Submit">
+        <MudGrid class="mt-n4" Spacing=8>
+            <MudItem xs=12>
+                <MudTextField @bind-Value="UpdateDebtDto.DebtSource" Label="Debt Source" For="@(() => UpdateDebtDto.DebtSource)" Variant="Variant.Outlined" Placeholder="Enter the Debt Source" Immediate="true" />
+            </MudItem>
+            <MudItem xs=12>
+                <MudTextField @bind-Value="UpdateDebtDto.DebtAmount" Label="Debt Amount" For="@(() => UpdateDebtDto.DebtAmount)" Variant="Variant.Outlined" Placeholder="Enter the Debt Amount" Immediate="true" />
+            </MudItem>
+            <MudItem xs=12>
+                <MudTextField @bind-Date="UpdateDebtDto.DueDate" Label="Debt Date" For="@(() => UpdateDebtDto.DueDate)" Variant="Variant.Outlined" Placeholder="Enter the Debt Date" Immediate="true" />
+            </MudItem>
+        </MudGrid>
+    </ModalLayout>
+}
 
+<style>
+    .custom-debt-paper {
+        background-color: #6A1B9A; /* Purple background */
+        color: white;
+        border-radius: 8px;
+    }
+
+    .custom-debt-btn {
+        background-color: #6A1B9A; /* Purple button */
+        color: white;
+        font-weight: bold;
+    }
+
+    .custom-debt-btn:hover {
+        background-color: #9c4dcc; /* Lighter purple on hover */
+    }
+
+    .table {
+        background-color: #ffffff;
+    }
+
+    .table th {
+        background-color: #6A1B9A; /* Purple header */
+        color: white;
+    }
+
+    .table td {
+        color: #424242;
+    }
+
+    .action .mud-tooltip {
+        color: #6A1B9A; /* Tooltip color */
+    }
+
+    .country-table {
+        background-color: #ffffff;
+    }
+
+    .country-table td {
+        color: #424242;
+    }
+
+    .country-table th {
+        background-color: #6A1B9A; /* Matching header color */
+        color: white;
+    }
+
+    .table-responsive {
+        margin-top: 1rem;
+    }
+</style>

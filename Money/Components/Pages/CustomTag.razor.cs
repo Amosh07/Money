@@ -5,7 +5,7 @@ namespace Money.Components.Pages
 {
     public partial class CustomTag
     {
-        private List<Tag>? Tags { get; set; }
+        private List<Tag>? Tags { get; set; } = new();
 
         protected override async Task OnInitializedAsync()
         {
@@ -74,6 +74,70 @@ namespace Money.Components.Pages
             catch (Exception ex)
             {
                 throw new Exception("");
+            }
+        }
+        #endregion
+
+        #region Update CustomTag
+        private bool IsUpdateModalOpen { get; set; }
+
+        private UpdateTagDto UpdateTagDto { get; set; } = new();
+
+        private Tag GetTagDto { get; set; } = new();
+
+        private bool IsTagButtonDisabled =>
+            string.IsNullOrEmpty(UpdateTagDto.TagName);
+
+        private async Task OpenUpdateModal(Guid tagId)
+        {
+            var response = TagInterface.TagGetById(tagId);
+
+            if (response is null)
+            {
+                return;
+            }
+
+            GetTagDto = response;
+
+            UpdateTagDto = new UpdateTagDto()
+            {
+                Id = GetTagDto.Id,
+                TagName = GetTagDto.TagName,
+                IsActive = GetTagDto.IsActive
+            };
+
+            OpenCloseEditModal();
+            StateHasChanged();
+        }
+
+        private void OpenCloseEditModal()
+        {
+            IsUpdateModalOpen = !IsUpdateModalOpen;
+
+            StateHasChanged();
+        }
+
+        private async Task UpdateTag(bool isClosed)
+        {
+            if (isClosed)
+            {
+                IsUpdateModalOpen = false;
+                return;
+            }
+
+            try
+            {
+                var result = TagInterface.UpdateTag(UpdateTagDto);
+
+                if (result is null)
+                {
+                    //SnackbarService.ShowSnackbar(result?.Message ?? Constants.Message.ExceptionMessage, Severity.Error, Variant.Outlined);
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                // SnackbarService.ShowSnackbar(ex.Message, Severity.Error, Variant.Outlined);
             }
         }
         #endregion

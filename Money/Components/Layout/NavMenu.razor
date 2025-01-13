@@ -1,11 +1,40 @@
-﻿<MudPaper Width="250px" Class="py-3" Elevation="0">
+﻿<MudPaper Width="250px" Class="nav-menu-paper py-3" Elevation="1">
     <MudNavMenu>
-        <MudText Typo="Typo.h6" Class="px-4">My Application</MudText>
-        <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Secondary Text</MudText>
+        <MudText Typo="Typo.h6" Class="px-4 nav-menu-title">AHT Dashboard</MudText>
+        <MudText Typo="Typo.body2" Class="px-4 nav-menu-subtitle">Select Your Credentials</MudText>
         <MudDivider Class="my-2" />
-        <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
-        <MudNavLink Href="/customTag" Icon="@Icons.Material.Filled.AddCard">Add Tag</MudNavLink>
-        <MudNavLink Href="/debt" Icon="@Icons.Material.Filled.AddCard">Add Debts</MudNavLink>
-        <MudNavLink Href="/transactions" Icon="@Icons.Material.Filled.AddCard">Add Transactions</MudNavLink>
+        <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard" Class="nav-link">Dashboard</MudNavLink>
+        <MudNavLink Href="/customTag" Icon="@Icons.Material.Filled.AddCard" Class="nav-link">Add Tag</MudNavLink>
+        <MudNavLink Href="/debt" Icon="@Icons.Material.Filled.AddCard" Class="nav-link">Add Debts</MudNavLink>
+        <MudNavLink Href="/transactions" Icon="@Icons.Material.Filled.AddCard" Class="nav-link">Add Transactions</MudNavLink>
     </MudNavMenu>
 </MudPaper>
+
+<style>
+    .nav-menu-paper {
+        background-color: #EDE7F6;
+        color: white;
+        border-radius: 8px;
+    }
+
+    .nav-menu-title {
+        color: #000000;
+        font-weight: bold;
+    }
+
+    .nav-menu-subtitle {
+        color: #000000;
+        margin-bottom: 0.5rem;
+
+    }
+
+    .nav-link {
+        color: #000000;
+        font-weight: 900;
+        
+    }
+
+    .nav-link:hover {
+        color: #ffffff;
+    }
+</style>

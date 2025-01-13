@@ -7,12 +7,12 @@
     <Loader/>
 }
 else
-
-{<Back />
-    <MudPaper Class="p-4">
+{
+    <Back />
+    <MudPaper Class="p-4 custom-tag-paper">
         <MudText Typo="Typo.h5" GutterBottom>Manage Tags</MudText>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" class="btn btn--md" OnClick="OpenTagRegister" Disabled="IsCreatedModal" ButtonType="ButtonType.Submit">Add Tag</MudButton>
-        
+        <MudButton Variant="Variant.Filled" Class="custom-tag-btn btn btn--md" Color="Color.Secondary" DropShadow="false" OnClick="OpenTagRegister" Disabled="IsCreatedModal" ButtonType="ButtonType.Submit">Add Tag</MudButton>
+
         <div class="table-responsive">
             <table class="table country-table">
                 <thead>
@@ -64,7 +64,6 @@ else
                  OnSave="AddRegisterTag"
                  CancelLabel="Discard"
                  SubmitLabel="Save"
-                 IsDisabled="IsCreateButtonDisabled"
                  IsVisible="@IsCreatedModal"
                  IsVisibleChanged="@((bool value) => IsCreatedModal = value)">
             <MudGrid>
@@ -77,3 +76,73 @@ else
             </MudGrid>
      </ModalLayout>
 }
+@if (IsUpdateModalOpen)
+{
+    <ModalLayout Module="Tag"
+                 Title="Update Tag"
+                 Description="Update an existing Tag to the system, by filling in the following form."
+                 SubmitColor="Color.Primary"
+                 Size="modal-lg"
+                 OnSave="@UpdateTag"
+                 IsVisible="true"
+                 CancelLabel="Discard"
+                 SubmitLabel="Submit">
+        <MudGrid class="mt-n4" Spacing=8>
+            <MudItem xs=12>
+                <MudTextField @bind-Value="UpdateTagDto.TagName" Label="Name" For="@(() => UpdateTagDto.TagName)" Variant="Variant.Outlined" Placeholder="Enter the Custom Tag Name " Immediate="true" />
+            </MudItem>
+        </MudGrid>
+    </ModalLayout>
+}
+
+<style>
+    .custom-tag-paper {
+        background-color: #6A1B9A; /* Purple background */
+        color: white;
+        border-radius: 8px;
+    }
+
+    .custom-tag-btn {
+        background-color: #6A1B9A; /* Purple button */
+        color: white;
+        font-weight: bold;
+    }
+
+    .custom-tag-btn:hover {
+        background-color: #9c4dcc; /* Lighter purple on hover */
+    }
+
+    .table {
+        background-color: #ffffff;
+    }
+
+    .table th {
+        background-color: #6A1B9A; /* Purple header */
+        color: white;
+    }
+
+    .table td {
+        color: #424242;
+    }
+
+    .action .mud-tooltip {
+        color: #6A1B9A; /* Tooltip color */
+    }
+
+    .country-table {
+        background-color: #ffffff;
+    }
+
+    .country-table td {
+        color: #424242;
+    }
+
+    .country-table th {
+        background-color: #6A1B9A; /* Matching header color */
+        color: white;
+    }
+
+    .table-responsive {
+        margin-top: 1rem;
+    }
+</style>

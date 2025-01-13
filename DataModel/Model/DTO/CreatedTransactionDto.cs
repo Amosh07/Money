@@ -12,7 +12,7 @@ namespace DataModel.Model.DTO
 
         public DateTime? TransactionDate { get; set; }
 
-        public TransactionTypes TransactionType { get; set; }
+        public int TransactionType { get; set; }
 
         public string Remarks { get; set; }
 

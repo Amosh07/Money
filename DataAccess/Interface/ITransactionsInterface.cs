@@ -13,5 +13,9 @@ namespace DataAccess.Interface
         Transactions GetById(Guid Id);
 
         void ActiveDeactive(Guid Id);
+
+        Task<List<Transactions>> HighestTransaction();
+
+        Task<Decimal> CurrentBalance();
     }
 }

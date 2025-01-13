@@ -50,9 +50,19 @@ namespace DataAccess.Services
             return _debtList.ToList();
         }
 
-        public Debt GetById(Guid id)
+        public Debt GetById(Guid Id)
         {
-            return _debtList.FirstOrDefault(d => d.Id == id);
+            throw new NotImplementedException();
+        }
+
+        public async Task UpdateDebt(UpdateDebtDto debt)
+        {
+            UpdateItem(t => t.Id == debt.Id, t =>
+            {
+                t.DebtSource = debt.DebtSource;
+                t.DebtDate = debt.DebtDate;
+                t.DebtAmount = debt.DebtAmount;
+            });
         }
     }
 }
