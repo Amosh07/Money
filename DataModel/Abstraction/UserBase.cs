@@ -7,12 +7,13 @@ namespace DataModel.Abstraction
     {
         private readonly string FilePath;
 
-        protected UserBase(string fileName ) 
+        protected UserBase(string fileName) 
         {
             FilePath = Path.Combine(FileSystem.AppDataDirectory, fileName);
 
             EnsureDirectoryExists();
         }
+
         private void EnsureDirectoryExists() 
         {
             var directory = Path.GetDirectoryName(FilePath);
@@ -38,6 +39,22 @@ namespace DataModel.Abstraction
 
             File.WriteAllText(FilePath, json);
         }
-       
+        protected bool UpdateItem(Func<T, bool> predicate, Action<T> updateAction)
+        {
+            var items = LoadData();
+
+            var item = items.FirstOrDefault(predicate);
+
+            if (item == null)
+            {
+                return false;
+            }
+            updateAction(item);
+
+            SaveData(items);
+
+            return true;
+        }
+
     }
 }

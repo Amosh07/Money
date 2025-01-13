@@ -12,5 +12,7 @@ namespace DataAccess.Interface
         List<Tag> GetAllTag();
 
         Tag TagGetById(Guid Id);
+
+        Task UpdateTag(UpdateTagDto tag);
     }
 }

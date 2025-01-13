@@ -1,5 +1,7 @@
 ﻿@page "/transactions"
+@using DataModel.Common.Base
 @using DataModel.Model.Constants
+@using Money.Components.Dialog
 @using Money.Components.Layout
 
 @if(transactions == null)
@@ -9,9 +11,9 @@
 else
 {
     <Back/>
-    <MudPaper Class="p-4">
+    <MudPaper Class="p-4 transaction-paper">
         <MudText Typo="Typo.h5" GutterBottom>Manage Transaction</MudText>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" class="btn btn--md" OnClick="OpenTransactionRegister" Disabled="IsCreateModalOpen" ButtonType="ButtonType.Submit">Add Transactions</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" class="btn btn--md transaction-btn" OnClick="OpenTransactionRegister" Disabled="IsCreateModalOpen" ButtonType="ButtonType.Submit">Add Transactions</MudButton>
         
         <div class="table-responsive">
             <table class="table country-table">
@@ -42,7 +44,7 @@ else
                                     <MudTooltip Text="Edit" Color="Color.Primary" Arrow="true">
                                         <MudImage Src="images/icons/edit.svg" Alt="Edit Icon" Height="18" Width="18" @onclick="() => OpenUpdateDebtModal(item.Id)" />
                                     </MudTooltip>
-                                    <MudTooltip Text="@(item.IsActive ? "Deactive" : "Active")" Color="Color.Primary" Arrow="true">
+                                    <MudTooltip Text="@(item.IsActive ? "Deactivate" : "Activate")" Color="Color.Primary" Arrow="true">
                                         <MudImage Src="@(item.IsActive ? "images/icons/document.svg" : "images/icons/delete.svg")" Alt="Status Icon" Height="18" Width="18" @onclick="() => OpenDebtDeleteModal(item.Id)" />
                                     </MudTooltip>
                                 </div>
@@ -65,7 +67,6 @@ else
                  OnSave="AddRegisterTransaction"
                  CancelLabel="Discard"
                  SubmitLabel="Save"
-                 IsDisabled="IsCreateButtonDisabled"
                  IsVisible="@IsCreateModalOpen"
                  IsVisibleChanged="@((bool value) => IsCreateModalOpen = value)">
             <MudGrid>
@@ -75,8 +76,11 @@ else
                 <MudItem xs="12">
                 <MudTextField Label="Transaction Amount" @bind-Value="createTransaction.TransactionAmount" Required="true" Variant="Variant.Outlined" />
                 </MudItem>
-                <MudItem xs="12">
-                    <MudTextField Label="Transaction Type" @bind-Value="createTransaction.TransactionType" Required="true" Variant="Variant.Outlined" />
+                <MudItem xs="12">   
+                    <MudSelect Label="Transaction Type" @bind-Value="createTransaction.TransactionType" Required="true" Variant="Variant.Outlined">
+                    <MudSelectItem Value="@((Int32)TransactionTypes.credit)">Credit</MudSelectItem>
+                    <MudSelectItem Value="@((Int32)TransactionTypes.debit)">Debit</MudSelectItem>
+                    </MudSelect>
                 </MudItem>
                 <MudItem xs="12">
                 <MudSelect T="Guid" Label="Select a Tag" @bind-Value="createTransaction.TagId" Variant="Variant.Outlined">
@@ -95,6 +99,7 @@ else
             </MudGrid>
     </ModalLayout>
 }
+
 @if (IsDeleteModalOpen)
 {
     <ModalLayout Module="Tag"
@@ -121,5 +126,54 @@ else
     </ModalLayout>
 }
 
+<style>
+    .transaction-paper {
+        background-color: #6A1B9A; /* Purple header */
+        color: white;
+        border-radius: 8px;
+    }
 
+    .transaction-btn {
+        background-color: #6A1B9A; /* Purple header */
+        color: white;
+        font-weight: bold;
+    }
 
+    .transaction-btn:hover {
+       background-color: #9c4dcc; /* Lighter purple on hover */
+    }
+
+    .table {
+        background-color: #ffffff;
+    }
+
+    .table th {
+            background-color: #6A1B9A; /* Purple header */
+            color: white;
+    }
+
+    .table td {
+        color: #424242;
+    }
+
+    .action .mud-tooltip {
+        color: #6A1B9A; /* Tooltip color */
+    }
+
+    .country-table {
+        background-color: #ffffff;
+    }
+
+    .country-table td {
+        color: #424242;
+    }
+
+    .country-table th {
+            background-color: #6A1B9A; /* Matching header color */
+            color: white;
+    }
+
+    .table-responsive {
+        margin-top: 1rem;
+    }
+</style>

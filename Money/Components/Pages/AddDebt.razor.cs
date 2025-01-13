@@ -81,7 +81,7 @@ namespace Money.Components.Pages
         #endregion
 
         #region GetAllTags
-        private List<Tag> Tags { get; set; }
+        private List<Tag>? Tags { get; set; }
         private async Task GetAllTags()
         {
             var response = TagInterface.GetAllTag();
@@ -133,6 +133,74 @@ namespace Money.Components.Pages
             catch (Exception ex)
             {
                 //SnackbarService.ShowSnackbar(ex.Message, Severity.Error, Variant.Outlined);
+            }
+        }
+        #endregion
+
+        #region Update Debts
+        private bool IsUpdateModalOpen { get; set; }
+
+        private UpdateDebtDto UpdateDebtDto { get; set; } = new();
+
+        private Debt GetDebtDto { get; set; } = new();
+
+        private bool IsDebtButtonDisabled =>
+            string.IsNullOrEmpty(UpdateDebtDto.DebtSource) ||
+            string.IsNullOrEmpty(UpdateDebtDto.DueDate.ToString()) ||
+            string.IsNullOrEmpty(UpdateDebtDto.DebtAmount.ToString()) ||
+            string.IsNullOrEmpty(UpdateDebtDto.Tag?.TagName);
+
+        private async Task OpenUpdateModal(Guid debtId)
+        {
+            var response = DebtInterface.GetById(debtId);
+
+            if (response is null)
+            {
+                return;
+            }
+
+            GetDebtDto = response;
+
+            UpdateDebtDto = new UpdateDebtDto()
+            {
+                Id = GetDebtDto.Id,
+                DebtSource = GetDebtDto.DebtSource,
+                DebtDate = GetDebtDto.DebtDate,
+                DebtAmount = GetDebtDto.DebtAmount
+            };
+
+            OpenCloseEditModal();
+            StateHasChanged();
+        }
+
+        private void OpenCloseEditModal()
+        {
+            IsUpdateModalOpen = !IsUpdateModalOpen;
+
+            StateHasChanged();
+        }
+
+        private async Task UpdateTag(bool isClosed)
+        {
+            if (isClosed)
+            {
+                IsUpdateModalOpen = false;
+                return;
+            }
+
+            try
+            {
+                var result = DebtInterface.UpdateDebt(UpdateDebtDto);
+
+                if (result is null)
+                {
+                    //SnackbarService.ShowSnackbar(result?.Message ?? Constants.Message.ExceptionMessage, Severity.Error, Variant.Outlined);
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                // SnackbarService.ShowSnackbar(ex.Message, Severity.Error, Variant.Outlined);
             }
         }
         #endregion

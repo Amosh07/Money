@@ -58,5 +58,27 @@ namespace DataAccess.Services
         {
             return _transactions.FirstOrDefault(t => t.Id == Id);
         }
+
+        public async Task<Decimal> CurrentBalance()
+        {
+            var transaction = GetAllTransaction();
+
+            var totalCredit = transaction.Where(t => t.TransactionTypes == 4)
+                             .Sum(t => t.TransactionAmount);
+
+            var totalDebit = transaction.Where(t => t.TransactionTypes == 5)
+                            .Sum(t => t.TransactionAmount);
+
+            var currentBalance = totalCredit - totalDebit;
+
+            return currentBalance;
+
+        }
+
+        public async Task<List<Transactions>> HighestTransaction()
+        {
+            var transaction = GetAllTransaction();
+            return transaction.OrderByDescending(t => t.TransactionAmount).Take(5).ToList();
+        }
     }
 }

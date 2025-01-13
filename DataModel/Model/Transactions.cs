@@ -1,6 +1,7 @@
 ﻿using DataModel.BaseEntity;
 using DataModel.Common.Base;
 
+
 namespace DataModel.Model
 {
     public class Transactions: BaseEntity<Guid>
@@ -13,7 +14,7 @@ namespace DataModel.Model
 
         public DateTime? TransactionDate { get; set; }
 
-        public TransactionTypes TransactionTypes { get; set; }
+        public int TransactionTypes { get; set; }
 
         public bool IsActive { get; set; }
 
