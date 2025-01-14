@@ -58,6 +58,56 @@
                                     </MudPaper>
                                 }
                             </MudItem>
+                            <MudItem xs="12" sm="6">
+                                <MudPaper>
+                                    <BarChart T="Debt" Items="@RemainingDebt"
+                                              IsHorizontallyAligned="false"
+                                              Height="450"
+                                              Width="650"
+                                              Title="Remaining Debts"
+                                              MaxYValue="5"
+                                              ShowLegend="false"
+                                              XValue="@(e => $"{e.DebtSource}")"
+                                              YValue="@(e => e.Sum(z => (decimal)z.DebtAmount))" />
+                                </MudPaper>
+                            </MudItem>
+                            <MudItem xs="12" sm="6">
+                                @if (RemainingDebt == null)
+                                {
+                                    <Loader />
+                                }
+                                else
+                                {
+                                    <MudPaper Class="p-4">
+                                        <MudText Typo="Typo.h5" GutterBottom>Top 5 Pending Debts</MudText>
+                                        <div class="table-responsive">
+                                            <table class="table country-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Debt Source</th>
+                                                        <th>Debt Amount</th>
+                                                        <th>Debt Date</th>
+                                                        <th>Due Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in RemainingDebt)
+                                                    {
+                                                        <tr>
+                                                            <td>@(RemainingDebt.IndexOf(item) + 1).</td>
+                                                            <td>@item.DebtSource</td>
+                                                            <td>@item.DebtAmount.ToString("C")</td>
+                                                            <td>@item.DebtDate</td>
+                                                            <td>@item.DueDate</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </MudPaper>
+                                }
+                            </MudItem>
                         </MudGrid>
                     </MudCardContent>
                 </MudCard>

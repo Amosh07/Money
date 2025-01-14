@@ -14,14 +14,12 @@ namespace DataAccess.Services
             _transactions = LoadData();
         }
 
-        public void ActiveDeactive(Guid Id)
+        public void ActiveDeactive(Guid Id, bool status)
         {
-            var transaction = _transactions.FirstOrDefault(t => t.Id == Id);
-
-            if (transaction != null)
+            UpdateItem(t => t.Id == Id, t =>
             {
-                transaction.IsActive = false;
-            }
+                t.IsActive = status;
+            });
         }
 
         public async Task AddTransaction(CreatedTransactionDto createTransaction)
@@ -64,17 +62,17 @@ namespace DataAccess.Services
         {
             var transaction = GetAllTransaction();
 
-            var totalDebit = transaction.Where(t => t.TransactionTypes == 4)
+            var totalCredit = transaction.Where(t => t.TransactionTypes == 4)
                              .Sum(t => t.TransactionAmount);
 
-            var totalCredit = transaction.Where(t => t.TransactionTypes == 5)
+            var totalDebit = transaction.Where(t => t.TransactionTypes == 5)
                             .Sum(t => t.TransactionAmount);
 
             var totalDebt = transaction.Where(t => t.TransactionTypes == 6).Sum(t => t.TransactionAmount);
 
-            var  transactionBalance= totalCredit - totalDebit;
+            var sumofTransaction = totalCredit - totalDebit;
 
-            var currentBalance = transactionBalance + totalDebt;
+            var currentBalance = sumofTransaction + totalDebt;
 
             return currentBalance;
 
@@ -84,6 +82,18 @@ namespace DataAccess.Services
         {
             var transaction = GetAllTransaction();
             return transaction.OrderByDescending(t => t.TransactionAmount).Take(5).ToList();
+        }
+
+        public async Task UpdateTransaction(UpdateTransactionDto transaction)
+        {
+            UpdateItem(t => t.Id == transaction.Id, t =>
+            {
+                t.Title = transaction.Title;
+                t.TransactionDate = transaction.TransactionDate;
+                t.TransactionAmount = transaction.TransactionAmount;
+                t.TransactionTypes = transaction.TransactionTypes;
+                t.Remarks = transaction.Remarks;
+            });
         }
     }
 }

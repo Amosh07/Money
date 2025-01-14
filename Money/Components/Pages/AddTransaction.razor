@@ -23,6 +23,7 @@ else
                         <th>Title</th>
                         <th>Transaction Amount</th>
                         <th>Transaction Type</th>
+                        <th>Transaction Date</th>
                         <th>Tag</th>
                         <th>Remark</th>
                         <th>Action</th>
@@ -42,7 +43,7 @@ else
                             <td>
                                 <div class="action">
                                     <MudTooltip Text="Edit" Color="Color.Primary" Arrow="true">
-                                        <MudImage Src="images/icons/edit.svg" Alt="Edit Icon" Height="18" Width="18" @onclick="() => OpenUpdateDebtModal(item.Id)" />
+                                        <MudImage Src="images/icons/edit.svg" Alt="Edit Icon" Height="18" Width="18" @onclick="() => OpenUpdateModal(item.Id)" />
                                     </MudTooltip>
                                     <MudTooltip Text="@(item.IsActive ? "Deactivate" : "Activate")" Color="Color.Primary" Arrow="true">
                                         <MudImage Src="@(item.IsActive ? "images/icons/document.svg" : "images/icons/delete.svg")" Alt="Status Icon" Height="18" Width="18" @onclick="() => OpenDebtDeleteModal(item.Id)" />
@@ -56,7 +57,7 @@ else
         </div>
     </MudPaper>
 }
-
+ 
 @if (IsCreateModalOpen)
 {
     <ModalLayout Module="Transaction"
@@ -107,10 +108,9 @@ else
                  Description="Are you sure you want to delete this Transaction?"
                  SubmitColor="Color.Primary"
                  Size="modal-lg"
-                 OnSave="@DeleteTag"
+                 OnSave="@(() => TransactionDelete(!DeleteTransaction.IsActive))"
                  CancelLabel="Discard"
                  SubmitLabel="@(DeleteTransaction.IsActive ? "Deactivate" : "Activate")"
-                 IsDisabled="IsDeleteModalOpen"
                  IsVisible="@IsDeleteModalOpen"
                  IsVisibleChanged="@((bool value) => IsDeleteModalOpen = value)">
         <div class="text-center">
@@ -123,6 +123,39 @@ else
                 Are you sure you want to @(DeleteTransaction.IsActive ? "deactivate" : "activate") the following Transaction?
             </MudText>
         </div>
+    </ModalLayout>
+}
+@if (IsUpdateModalOpen)
+{
+    <ModalLayout Module="Transactions"
+                 Title="Update Transaction"
+                 Description="Update an existing debt by filling out the form."
+                 SubmitColor="Color.Primary"
+                 Size="modal-lg"
+                 OnSave="@UpdateTag"
+                 IsVisible="true"
+                 CancelLabel="Discard"
+                 SubmitLabel="Submit">
+        <MudGrid class="mt-n4" Spacing=8>
+            <MudItem xs=12>
+                <MudTextField @bind-Value="UpdateTransactionDto.Title" Label="Title" For="@(() => UpdateTransactionDto.Title)" Variant="Variant.Outlined" Placeholder="Enter the Title" Immediate="true" />
+            </MudItem>
+            <MudItem xs=12>
+                <MudTextField @bind-Value="UpdateTransactionDto.TransactionAmount" Label="Transaction Amount" For="@(() => UpdateTransactionDto.TransactionAmount)" Variant="Variant.Outlined" Placeholder="Enter the Transaction Amount" Immediate="true" />
+            </MudItem>
+            <MudItem xs=12>
+                <MudDatePicker @bind-Date="UpdateTransactionDto.TransactionDate" Label="Transaction Date" For="@(() => UpdateTransactionDto.TransactionDate)" Variant="Variant.Outlined" PickerVariant="PickerVariant.Dialog" DateFormate="dd.MM.yyyy" />
+            </MudItem>
+            <MudItem xs=12>
+                <MudSelect Label="Transaction Type" @bind-Value="UpdateTransactionDto.TransactionTypes" Required="true" Variant="Variant.Outlined">
+                    <MudSelectItem Value="@((Int32)TransactionTypes.credit)">Credit</MudSelectItem>
+                    <MudSelectItem Value="@((Int32)TransactionTypes.debit)">Debit</MudSelectItem>
+                    </MudSelect>
+            </MudItem>
+            <MudItem xs=12>
+                <MudTextField @bind-Value="UpdateTransactionDto.Remarks" Label="Remarks" For="@(() => UpdateTransactionDto.Remarks)" Variant="Variant.Outlined" Placeholder="Remarks" Immediate="true" />
+            </MudItem>
+        </MudGrid>
     </ModalLayout>
 }
 

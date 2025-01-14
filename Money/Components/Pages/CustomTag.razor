@@ -1,4 +1,5 @@
 ﻿@page "/customTag"
+@using DataModel.Model.Constants
 @using Money.Components.Dialog
 @using Money.Components.Layout
 
@@ -40,10 +41,10 @@ else
                             <td>
                                 <div class="action">
                                     <MudTooltip Text="Edit" Color="Color.Primary" Arrow="true">
-                                        <MudImage Src="images/icons/edit.svg" Alt="Edit Icon" Height="18" Width="18" @onclick="() => OpenUpdateTagModal(item.Id)" />
+                                        <MudImage Src="images/icons/edit.svg" Alt="Edit Icon" Height="18" Width="18" @onclick="() => OpenUpdateModal(item.Id)" />
                                     </MudTooltip>
                                     <MudTooltip Text="@(item.IsActive ? "Deactivate" : "Activate")" Color="Color.Primary" Arrow="true">
-                                        <MudImage Src="@(item.IsActive ? "images/icons/delete.svg" : "images/icons/document.svg")" Alt="Bin Icon" Height="18" Width="18"/>
+                                        <MudImage Src="@(item.IsActive ? "images/icons/delete.svg" : "images/icons/document.svg")" Alt="Bin Icon" Height="18" Width="18" @onclick="() => OpenTagDeleteModal(item.Id)" />
                                     </MudTooltip>
                                 </div>
                             </td>
@@ -54,6 +55,7 @@ else
         </div>
     </MudPaper>
 }
+
 @if (IsCreatedModal)
 {
     <ModalLayout Module="Tags"
@@ -76,6 +78,7 @@ else
             </MudGrid>
      </ModalLayout>
 }
+
 @if (IsUpdateModalOpen)
 {
     <ModalLayout Module="Tag"
@@ -95,6 +98,30 @@ else
     </ModalLayout>
 }
 
+@if (IsDeleteModalOpen)
+{
+    <ModalLayout Module="Tag"
+                    Title="Delete Tag" 
+                    Description="Are you sure you want to delete this tag?"
+                    SubmitColor="Color.Primary"
+                    Size="modal-lg"
+                     OnSave="@(() => DeleteTag(!DeleteTags.IsActive))"
+                    CancelLabel="Discard"
+                    SubmitLabel="@(DeleteTags.IsActive ? "Deactivate" : "Activate")"
+                    IsVisible="@IsDeleteModalOpen"
+                    IsVisibleChanged="@((bool value) => IsDeleteModalOpen = value)">
+        <div class="text-center">
+            <LoadIcon Height="200"
+                        Width="200"
+                        Icon="@(DeleteTags.IsActive ? Animations.Regular.Trash : Animations.Regular.Edit)"
+                        State="hover-pinch"
+                        Trigger="loop" />
+            <MudText Class="hfs4 data fw-600">
+                Are you sure you want to @(DeleteTags.IsActive ? "deactivate" : "activate") the following Tag?
+            </MudText>
+        </div>
+    </ModalLayout>
+}
 <style>
     .custom-tag-paper {
         background-color: #6A1B9A; /* Purple background */

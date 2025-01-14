@@ -12,11 +12,13 @@ namespace DataAccess.Interface
 
         Transactions GetById(Guid Id);
 
-        void ActiveDeactive(Guid Id);
+        void ActiveDeactive(Guid Id, bool status);
 
         Task<List<Transactions>> HighestTransaction();
 
         Task<Decimal> CurrentBalance();
+
+        Task UpdateTransaction(UpdateTransactionDto transaction);
 
     }
 }

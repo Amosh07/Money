@@ -16,15 +16,81 @@ namespace Money.Components.Pages
         }
         #endregion
 
-        private async Task OpenUpdateDebtModal(Guid TagId)
+        #region Update Transactions
+        private bool IsUpdateModalOpen { get; set; }
+
+        private UpdateTransactionDto UpdateTransactionDto { get; set; } = new();
+
+        private Transactions GetTransactionDto { get; set; } = new();
+
+        private bool IsDebtButtonDisabled =>
+            string.IsNullOrEmpty(UpdateTransactionDto.Title) ||
+            string.IsNullOrEmpty(UpdateTransactionDto.TransactionDate.ToString()) ||
+            string.IsNullOrEmpty(UpdateTransactionDto.TransactionAmount.ToString()) ||
+            string.IsNullOrEmpty(UpdateTransactionDto.TransactionTypes.ToString()) ||
+            string.IsNullOrEmpty(UpdateTransactionDto.Remarks.ToString()) ||
+            string.IsNullOrEmpty(UpdateTransactionDto.Tag?.TagName);
+
+        private async Task OpenUpdateModal(Guid transactionId)
         {
-            var response = TransactionInterface.GetById(TagId);
+            var response = TransactionInterface.GetById(transactionId);
 
             if (response is null)
             {
-                // SnackbarService.ShowSnackbar(response.Message?? Constant.Message.ExceptionMessage, Severity.Error, Variant.Outlined);
+                return;
+            }
+
+            GetTransactionDto = response;
+
+            UpdateTransactionDto = new UpdateTransactionDto()
+            {
+                Id = GetTransactionDto.Id,
+                Title = GetTransactionDto.Title,
+                TransactionDate = GetTransactionDto.TransactionDate,
+                TransactionAmount = GetTransactionDto.TransactionAmount,
+                TransactionTypes = GetTransactionDto.TransactionTypes,
+                Remarks = GetTransactionDto.Remarks
+            };
+
+            OpenCloseEditModal();
+            StateHasChanged();
+        }
+
+        private void OpenCloseEditModal()
+        {
+            IsUpdateModalOpen = !IsUpdateModalOpen;
+
+            StateHasChanged();
+        }
+
+        private async Task UpdateTag(bool isClosed)
+        {
+            if (isClosed)
+            {
+                IsUpdateModalOpen = false;
+                return;
+            }
+
+            try
+            {
+                var result = TransactionInterface.UpdateTransaction(UpdateTransactionDto);
+
+                if (result is null)
+                {
+                    //SnackbarService.ShowSnackbar(result?.Message ?? Constants.Message.ExceptionMessage, Severity.Error, Variant.Outlined);
+                    return;
+                }
+                IsUpdateModalOpen = false;
+
+                StateHasChanged();
+
+            }
+            catch (Exception ex)
+            {
+                // SnackbarService.ShowSnackbar(ex.Message, Severity.Error, Variant.Outlined);
             }
         }
+        #endregion
 
         #region GetAllTransaction
         private async Task GetAllTransaction()
@@ -91,7 +157,7 @@ namespace Money.Components.Pages
         private List<Tag>? Tags { get; set; }
         private async Task GetAllTags()
         {
-            var response = TagInterface.GetAllTag();
+            var response = TagInterface.GetAllTagUseByOther();
 
             if (response is null)
             {
@@ -126,25 +192,21 @@ namespace Money.Components.Pages
             StateHasChanged();
         }
 
-        private async Task DeleteTag(bool isClosed)
+        private async Task TransactionDelete(bool isActive)
         {
-            if (isClosed)
-            {
-                IsDeleteModalOpen = false;
-                return;
-            }
-
             try
             {
-                TransactionInterface.ActiveDeactive(DeleteTransaction.Id);
+                TransactionInterface.ActiveDeactive(DeleteTransaction.Id, isActive);
 
                 IsDeleteModalOpen = false;
             }
             catch (Exception ex)
             {
-                //SnackbarService.ShowSnackbar(ex.Message, Severity.Error, Variant.Outlined);
+                {
+                    //SnackbarService.ShowSnackbar(ex.Message, Severity.Error, Variant.Outlined);
+                }
             }
+            #endregion
         }
-        #endregion
     }
 }
