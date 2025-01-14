@@ -14,5 +14,7 @@ namespace DataAccess.Interface
         void ActiveDeactive(Guid Id);
 
         Task UpdateDebt(UpdateDebtDto debt);
+
+        Task<List<Debt>> RemainingDebt();
     }
 }

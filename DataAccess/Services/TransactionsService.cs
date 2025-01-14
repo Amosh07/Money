@@ -37,6 +37,7 @@ namespace DataAccess.Services
                     IsActive = true,
                     Remarks = createTransaction.Remarks,
                     TagId = createTransaction.TagId,
+                    TransactionTypes = createTransaction.TransactionType
                 };
 
                 _transactions.Add(modelTransaction);
@@ -51,7 +52,7 @@ namespace DataAccess.Services
 
         public List<Transactions> GetAllTransaction()
         {
-            return _transactions.Where(t => t.IsActive).ToList();
+            return _transactions.OrderByDescending(t => t.IsActive).ToList();
         }
 
         public Transactions GetById(Guid Id)
@@ -63,13 +64,17 @@ namespace DataAccess.Services
         {
             var transaction = GetAllTransaction();
 
-            var totalCredit = transaction.Where(t => t.TransactionTypes == 4)
+            var totalDebit = transaction.Where(t => t.TransactionTypes == 4)
                              .Sum(t => t.TransactionAmount);
 
-            var totalDebit = transaction.Where(t => t.TransactionTypes == 5)
+            var totalCredit = transaction.Where(t => t.TransactionTypes == 5)
                             .Sum(t => t.TransactionAmount);
 
-            var currentBalance = totalCredit - totalDebit;
+            var totalDebt = transaction.Where(t => t.TransactionTypes == 6).Sum(t => t.TransactionAmount);
+
+            var  transactionBalance= totalCredit - totalDebit;
+
+            var currentBalance = transactionBalance + totalDebt;
 
             return currentBalance;
 

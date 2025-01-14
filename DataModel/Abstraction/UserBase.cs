@@ -7,42 +7,40 @@ namespace DataModel.Abstraction
     {
         private readonly string FilePath;
 
-        protected UserBase(string fileName) 
+        protected UserBase(string fileName)
         {
-            FilePath = Path.Combine(FileSystem.AppDataDirectory, fileName);
-
+            FilePath = Path.Combine(@"D:\CWdotnet", fileName);
             EnsureDirectoryExists();
         }
 
-        private void EnsureDirectoryExists() 
+        private void EnsureDirectoryExists()
         {
             var directory = Path.GetDirectoryName(FilePath);
 
-            if (!Directory.Exists(directory)) 
+            if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
             }
         }
 
-        protected List<T> LoadData() 
+        protected List<T> LoadData()
         {
-            if (!Directory.Exists(FilePath)) return new List<T>();
+            if (!File.Exists(FilePath)) return new List<T>();
 
             var json = File.ReadAllText(FilePath);
 
             return JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
         }
-       
-        protected void SaveData(List<T> item) 
+
+        protected void SaveData(List<T> item)
         {
             var json = JsonSerializer.Serialize(item);
-
             File.WriteAllText(FilePath, json);
         }
+
         protected bool UpdateItem(Func<T, bool> predicate, Action<T> updateAction)
         {
             var items = LoadData();
-
             var item = items.FirstOrDefault(predicate);
 
             if (item == null)
@@ -50,11 +48,8 @@ namespace DataModel.Abstraction
                 return false;
             }
             updateAction(item);
-
             SaveData(items);
-
             return true;
         }
-
     }
 }

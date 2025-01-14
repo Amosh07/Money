@@ -4,5 +4,6 @@
     {
         debit=4,
         credit=5,
+        debt=6
     }
 }

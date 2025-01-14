@@ -49,7 +49,7 @@ namespace Money.Components.Pages
 
         private bool IsCreateModalOpen { get; set; }
 
-        private CreatedTransactionDto createTransaction { get; set; } = new();
+        private CreatedTransactionDto? createTransaction { get; set; } = new();
 
         private void OpenTransactionRegister()
         {
@@ -74,6 +74,10 @@ namespace Money.Components.Pages
                 {
                     return;
                 }
+
+                IsCreateModalOpen = false;
+
+                StateHasChanged();
 
             }
             catch (Exception ex)
