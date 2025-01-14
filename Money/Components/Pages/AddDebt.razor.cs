@@ -78,7 +78,7 @@ namespace Money.Components.Pages
         private List<Tag>? Tags { get; set; }
         private async Task GetAllTags()
         {
-            var response = TagInterface.GetAllTag();
+            var response = TagInterface.GetAllTagUseByOther();
             if (response == null)
             {
                 Console.WriteLine("not found");
@@ -110,17 +110,11 @@ namespace Money.Components.Pages
             StateHasChanged();
         }
 
-        private async Task DeleteTag(bool isClosed)
+        private async Task DeleteTag(bool isActive)
         {
-            if (isClosed)
-            {
-                IsDeleteModalOpen = false;
-                return;
-            }
-
             try
             {
-                DebtInterface.ActiveDeactive(DeleteDebt.Id);
+               DebtInterface.ActiveDeactive(DeleteDebt.Id, isActive);
 
                 IsDeleteModalOpen = false;
             }
@@ -191,6 +185,10 @@ namespace Money.Components.Pages
                     //SnackbarService.ShowSnackbar(result?.Message ?? Constants.Message.ExceptionMessage, Severity.Error, Variant.Outlined);
                     return;
                 }
+                IsUpdateModalOpen = false;
+
+                StateHasChanged();
+
             }
             catch (Exception ex)
             {

@@ -11,6 +11,7 @@ namespace Money.Components.Pages
         {
             await HighestFive();
             await CurrentAmount();
+            await PendingDebts();
         }
         #endregion
 
@@ -44,6 +45,22 @@ namespace Money.Components.Pages
 
             CurrentBalance = response;  
          }
+        #endregion
+
+        #region PendingDebts
+
+        private List<Debt>? RemainingDebt { get; set; } = [];
+        private async Task PendingDebts()
+        {
+            var response = await DebtInterface.RemainingDebt();
+
+            if (response is null)
+            {
+                return;
+            }
+
+            RemainingDebt = response;
+        }
         #endregion
     }
 }

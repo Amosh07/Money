@@ -26,18 +26,6 @@ namespace Money.Components.Pages
         }
         #endregion
 
-        #region UpdateTag
-        private async Task OpenUpdateTagModal(Guid TagId)
-        {
-            var response = TagInterface.TagGetById(TagId);
-
-            if (response is null)
-            {
-                // SnackbarService.ShowSnackbar(response.Message?? Constant.Message.ExceptionMessage, Severity.Error, Variant.Outlined);
-            }
-        }
-        #endregion
-
         #region add CustomTag
 
         private bool IsCreateButtonDisabled =>
@@ -108,6 +96,7 @@ namespace Money.Components.Pages
             };
 
             OpenCloseEditModal();
+
             StateHasChanged();
         }
 
@@ -135,10 +124,48 @@ namespace Money.Components.Pages
                     //SnackbarService.ShowSnackbar(result?.Message ?? Constants.Message.ExceptionMessage, Severity.Error, Variant.Outlined);
                     return;
                 }
+                IsUpdateModalOpen = false;
             }
             catch (Exception ex)
             {
                 // SnackbarService.ShowSnackbar(ex.Message, Severity.Error, Variant.Outlined);
+            }
+        }
+        #endregion
+
+        #region Delete
+        private bool IsDeleteModalOpen { get; set; }
+
+        private Tag DeleteTags { get; set; } = new();
+
+        private async Task OpenTagDeleteModal(Guid Id)
+        {
+            var response = TagInterface.TagGetById(Id);
+
+            if (response is null)
+            {
+                // SnackbarService.ShowSnackbar(response?.Message ?? Constants.Message.ExceptionMessage, Severity.Error, Variant.Outlined);
+                return;
+            }
+
+            DeleteTags = response;
+
+            IsDeleteModalOpen = true;
+
+            StateHasChanged();
+        }
+
+        private async Task DeleteTag(bool isActive)
+        {
+            try
+            {
+                TagInterface.ActiveDeactive(DeleteTags.Id, isActive);
+
+                IsDeleteModalOpen = false;
+            }
+            catch (Exception ex)
+            {
+                //SnackbarService.ShowSnackbar(ex.Message, Severity.Error, Variant.Outlined);
             }
         }
         #endregion

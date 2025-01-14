@@ -17,15 +17,13 @@ namespace DataAccess.Services
             _transactionsInterface = transactionsInterface;
         }
 
-        public void ActiveDeactive(Guid Id)
-        {
-            var tag = _debtList.FirstOrDefault(t => t.Id == Id);
-
-            if (tag != null)
-            {
-                tag.IsActive = false;
-            }
-        }
+        //public void ActiveDeactive(Guid Id)
+        //{
+        //    UpdateItem(t => t.Id == Id, t =>
+        //    {
+        //        t.IsActive = false;
+        //    });
+        //}
 
         public async Task AddDebt(CreatedDebtDto debt)
         {
@@ -93,6 +91,25 @@ namespace DataAccess.Services
                 t.DebtSource = debt.DebtSource;
                 t.DebtDate = debt.DebtDate;
                 t.DebtAmount = debt.DebtAmount;
+            });
+
+            var transaction = new UpdateTransactionDto
+            {
+                Title = $"debt Add : {debt.DebtSource}",
+                TransactionAmount = debt.DebtAmount,
+                TransactionDate = DateTime.Now,
+                TransactionTypes = (int)TransactionTypes.debt,
+                Remarks = "Add Debts "
+            };
+
+            await _transactionsInterface.UpdateTransaction(transaction);
+        }
+
+        public void ActiveDeactive(Guid Id, bool status)
+        {
+            UpdateItem(t => t.Id == Id, t =>
+            {
+                t.IsActive = false;
             });
         }
     }

@@ -11,10 +11,11 @@ namespace DataAccess.Interface
 
         Debt GetById(Guid Id);
 
-        void ActiveDeactive(Guid Id);
+        void ActiveDeactive(Guid Id, bool status);
 
         Task UpdateDebt(UpdateDebtDto debt);
 
         Task<List<Debt>> RemainingDebt();
+
     }
 }

@@ -15,20 +15,10 @@ namespace DataAccess.Services
         }
         public void ActiveDeactive(Guid Id, bool status)
         {
-            try 
+            UpdateItem(t => t.Id == Id, t =>
             {
-                var tag = _tag.FirstOrDefault(t => t.Id == Id);
-
-                if (tag != null)
-                {
-                    tag.IsActive = status;
-                }
-            }
-            catch (Exception ex) 
-            {
-                throw new Exception("not found", ex);
-            }
-           
+                t.IsActive = status;
+            });
         }
 
         public async Task AddTag(CreatedTagDto tag)
@@ -62,14 +52,17 @@ namespace DataAccess.Services
             return _tag.FirstOrDefault(t => t.Id == Id);
         }
 
-        public object UpdateTag(UpdateTagDto updateTagDto)
+        public async Task UpdateTag(UpdateTagDto updateTagDto)
         {
-            throw new NotImplementedException();
+            UpdateItem(t => t.Id == updateTagDto.Id, t =>
+            {
+                t.TagName = updateTagDto.TagName;
+            });
+        }
+        public List<Tag> GetAllTagUseByOther()
+        {
+            return _tag.Where(t => t.IsActive).OrderByDescending(t => t.Id).ToList();
         }
 
-        Task ITagInterface.UpdateTag(UpdateTagDto tag)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
