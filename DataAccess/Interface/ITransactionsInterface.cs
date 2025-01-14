@@ -17,5 +17,6 @@ namespace DataAccess.Interface
         Task<List<Transactions>> HighestTransaction();
 
         Task<Decimal> CurrentBalance();
+
     }
 }

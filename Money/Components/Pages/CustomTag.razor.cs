@@ -70,6 +70,7 @@ namespace Money.Components.Pages
                     return;
                 }
 
+                IsCreatedModal = false;
             }
             catch (Exception ex)
             {

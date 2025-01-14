@@ -7,9 +7,10 @@ namespace Money.Components.Pages
 
     {
         #region OnInitilized 
-        protected override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
-            return base.OnInitializedAsync();
+            await HighestFive();
+            await CurrentAmount();
         }
         #endregion
 
@@ -26,6 +27,23 @@ namespace Money.Components.Pages
             }
             Transactions = response;
         }
+        #endregion
+
+        #region Current Balance 
+
+        private decimal CurrentBalance { get; set; }    
+
+         private async Task CurrentAmount()
+         {
+            var response = await TransactionInterface.CurrentBalance();
+
+            if(response <= 0)
+            {
+                return;
+            }
+
+            CurrentBalance = response;  
+         }
         #endregion
     }
 }

@@ -15,16 +15,7 @@ namespace Money.Components.Pages
             await GetAllTags();
         }
         #endregion
-        private async Task OpenUpdateDebtModal(Guid TagId)
-        {
-            var response = DebtInterface.GetById(TagId);
-
-            if (response is null)
-            {
-                // SnackbarService.ShowSnackbar(response.Message?? Constant.Message.ExceptionMessage, Severity.Error, Variant.Outlined);
-            }
-        }
-
+      
         #region GetAllDebt
         private async Task GetAllDebt()
         {
@@ -71,6 +62,9 @@ namespace Money.Components.Pages
                 {
                     return;
                 }
+
+                IsCreateModalOpen = false;
+                StateHasChanged();
 
             }
             catch (Exception ex)

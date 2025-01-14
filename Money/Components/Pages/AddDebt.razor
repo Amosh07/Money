@@ -42,7 +42,7 @@ else
                             <td>
                                 <div class="action">
                                     <MudTooltip Text="Edit" Color="Color.Primary" Arrow="true">
-                                        <MudImage Src="images/icons/edit.svg" Alt="Edit Icon" Height="18" Width="18" @onclick="() => OpenUpdateDebtModal(item.Id)" />
+                                        <MudImage Src="images/icons/edit.svg" Alt="Edit Icon" Height="18" Width="18" @onclick="() => OpenUpdateModal(item.Id)" />
                                     </MudTooltip>
                                 </div>
                             </td>
@@ -139,7 +139,7 @@ else
                 <MudTextField @bind-Value="UpdateDebtDto.DebtAmount" Label="Debt Amount" For="@(() => UpdateDebtDto.DebtAmount)" Variant="Variant.Outlined" Placeholder="Enter the Debt Amount" Immediate="true" />
             </MudItem>
             <MudItem xs=12>
-                <MudTextField @bind-Date="UpdateDebtDto.DueDate" Label="Debt Date" For="@(() => UpdateDebtDto.DueDate)" Variant="Variant.Outlined" Placeholder="Enter the Debt Date" Immediate="true" />
+                <MudDatePicker @bind-Date="UpdateDebtDto.DueDate" Label="Debt Date" For="@(() => UpdateDebtDto.DueDate)" Variant="Variant.Outlined" PickerVariant="PickerVariant.Dialog" DateFormate ="dd.MM.yyyy" />
             </MudItem>
         </MudGrid>
     </ModalLayout>

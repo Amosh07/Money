@@ -35,7 +35,7 @@ else
                             <td>@(transactions.IndexOf(item) + 1).</td>
                             <td>@item.Title</td>
                             <td>@item.TransactionAmount.ToString("C")</td>
-                            <td>@item.TransactionTypes</td>
+                            <td>@Enum.GetName(typeof(TransactionTypes),item.TransactionTypes)</td>
                             <td>@item.TransactionDate</td>
                             <td>@item.Tag?.TagName</td>
                             <td>@item.Remarks</td>

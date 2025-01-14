@@ -1,5 +1,6 @@
 ﻿using DataAccess.Interface;
 using DataModel.Abstraction;
+using DataModel.Common.Base;
 using DataModel.Model;
 using DataModel.Model.DTO;
 
@@ -8,9 +9,12 @@ namespace DataAccess.Services
     public class DebtService : UserBase<Debt>, IDebtInterface
     {
         private List<Debt> _debtList;
-        public DebtService() : base("Debt.json")
+
+        private readonly ITransactionsInterface _transactionsInterface;
+        public DebtService(ITransactionsInterface transactionsInterface) : base("Debt.json")
         {
             _debtList = LoadData();
+            _transactionsInterface = transactionsInterface;
         }
 
         public void ActiveDeactive(Guid Id)
@@ -38,6 +42,24 @@ namespace DataAccess.Services
                     DueDate = debt.DueDate,
                 };
 
+                _debtList.Add(debtModel);
+
+                SaveData(_debtList);
+
+                var transaction = new CreatedTransactionDto
+                {
+                    Title = $"debt added : {debt.DebtSource}",
+                    TransactionAmount = debt.DebtAmount,
+                    TransactionDate = DateTime.Now,
+                    TransactionType = (int)TransactionTypes.debit,
+                    TagId = debt.TagId,
+                    Remarks = "Add Debts successully"
+                };
+
+                await _transactionsInterface.AddTransaction(transaction);
+
+
+
             }
             catch (Exception ex)
             {
@@ -47,12 +69,21 @@ namespace DataAccess.Services
 
         public List<Debt> GetAllDebt()
         {
-            return _debtList.ToList();
+            return _debtList.OrderByDescending(t => t.Id).ToList();
         }
 
         public Debt GetById(Guid Id)
         {
-            throw new NotImplementedException();
+            return _debtList.FirstOrDefault(d => d.Id == Id);
+        }
+
+        public async Task<List<Debt>> RemainingDebt()
+        {
+           var pending = GetAllDebt();
+
+            var debtPending = pending.Where(d => !d.IsCleard);
+
+            return debtPending.OrderByDescending(t=> t.DebtAmount).ToList();
         }
 
         public async Task UpdateDebt(UpdateDebtDto debt)
