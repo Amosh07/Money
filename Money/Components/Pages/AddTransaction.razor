@@ -24,7 +24,6 @@ else
                         <th>Transaction Amount</th>
                         <th>Transaction Type</th>
                         <th>Transaction Date</th>
-                        <th>Tag</th>
                         <th>Remark</th>
                         <th>Action</th>
                     </tr>
@@ -38,7 +37,6 @@ else
                             <td>@item.TransactionAmount.ToString("C")</td>
                             <td>@Enum.GetName(typeof(TransactionTypes),item.TransactionTypes)</td>
                             <td>@item.TransactionDate</td>
-                            <td>@item.Tag?.TagName</td>
                             <td>@item.Remarks</td>
                             <td>
                                 <div class="action">

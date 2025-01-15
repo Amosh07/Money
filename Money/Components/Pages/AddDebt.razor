@@ -22,7 +22,6 @@ else
                         <th>SourceOfDebt</th>
                         <th>DebtAmount</th>
                         <th>DueDate</th>
-                        <th>Tag</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -35,7 +34,6 @@ else
                             <td>@item.DebtSource</td>
                             <td>@item.DebtAmount.ToString("C")</td>
                             <td>@item.DueDate</td>
-                            <td>@item.Tag?.TagName</td>
                             <td>
                                 @(item.IsCleard ? "Paid" : "Pending")
                             </td>

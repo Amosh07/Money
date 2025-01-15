@@ -49,7 +49,8 @@ namespace Money.Components.Pages
                 TransactionDate = GetTransactionDto.TransactionDate,
                 TransactionAmount = GetTransactionDto.TransactionAmount,
                 TransactionTypes = GetTransactionDto.TransactionTypes,
-                Remarks = GetTransactionDto.Remarks
+                Remarks = GetTransactionDto.Remarks,
+                Tag = GetTransactionDto.Tag
             };
 
             OpenCloseEditModal();
