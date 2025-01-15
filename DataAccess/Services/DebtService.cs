@@ -81,7 +81,7 @@ namespace DataAccess.Services
 
             var debtPending = pending.Where(d => !d.IsCleard);
 
-            return debtPending.OrderByDescending(t=> t.DebtAmount).ToList();
+            return debtPending.OrderBy(t=> t.DueDate).ToList();
         }
 
         public async Task UpdateDebt(UpdateDebtDto debt)

@@ -1,20 +1,38 @@
 ﻿@page "/login"
 
 <div class="form-login">
-    <form class="text-center shadow-lg p-5 rounded-start bg-light-purple table-borderless" @onsubmit="HandleLogin">
+    <form class="text-center shadow-lg p-5 rounded bg-light-purple table-borderless full-screen-form" @onsubmit="HandleLogin">
         <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(135deg, #6A1B9A, #4A0072);
+                font-family: Arial, sans-serif;
+            }
+
             .bg-light-purple {
-                background-color: #6A1B9A; /* purple color */
+                background-color: rgba(0, 150, 136, 0.2); /* Updated semi-transparent teal */
+                backdrop-filter: blur(10px);
+                border-radius: 15px;
+                padding: 40px;
+                width: 100%;
+                max-width: 400px;
+                box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             }
 
             .form-control {
                 border: 1px solid #4A0072;
                 border-radius: 10px;
+                padding: 10px;
+                font-size: 16px;
             }
 
             .form-control:focus {
                 border-color: #D500F9;
-                box-shadow: 0 0 5px rgba(213, 0, 249, 0.5);
+                box-shadow: 0 0 10px rgba(213, 0, 249, 0.5);
             }
 
             .form-floating label {
@@ -29,27 +47,22 @@
                 font-weight: bold;
             }
 
-            .shadow-lg {
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            }
-
             .alert-danger {
                 background-color: #E57373;
                 border-color: #E53935;
                 color: #FFFFFF;
                 border-radius: 5px;
+                margin-top: 15px;
+                padding: 10px;
             }
 
             button {
                 background-color: #8E24AA;
                 border: none;
                 color: white;
-                padding: 10px 20px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 16px;
-                margin: 4px 2px;
+                padding: 12px 25px;
+                font-size: 18px;
+                margin-top: 20px;
                 cursor: pointer;
                 border-radius: 10px;
                 transition: background-color 0.3s ease;
@@ -59,23 +72,21 @@
                 background-color: #7B1FA2;
             }
 
-            .mb-3 img {
-                border-radius: 10px;
-            }
-
-            .h3 {
-                color: #E1BEE7;
-                font-family: Arial, sans-serif;
-            }
-
-            .navbar-text {
+            h1 {
                 color: #F3E5F5;
-                font-size: 16px;
+                font-size: 28px;
+                margin-bottom: 20px;
+                font-weight: bold;
+            }
+
+            p.navbar-text {
+                color: #F3E5F5;
+                font-size: 18px;
+                margin-bottom: 20px;
             }
         </style>
-        <img class="mb-3" src="/appicon.png" alt="" height="70">
-        <h1 class="h3 mb-3 fw-bolder text-md-center shadow-lg p-lg-0" style="color: #F3E5F5;">Welcome to User</h1>
-        <p class="mb-4 navbar-text shadow-sm pa-4" style="color: #F3E5F5;">Please enter your credentials</p>
+        <h1>Welcome to User</h1>
+        <p class="navbar-text">Please enter your credentials</p>
 
         <!-- Username Input -->
         <div class="form-floating mb-3">
@@ -91,9 +102,9 @@
 
         @if (!string.IsNullOrEmpty(ErrorMessage))
         {
-                <div class="alert alert-danger">@ErrorMessage</div>
+            <div class="alert alert-danger">@ErrorMessage</div>
         }
-        <button class="MudButton">Login</button>
+        <button type="submit">Login</button>
     </form>
 </div>
 
